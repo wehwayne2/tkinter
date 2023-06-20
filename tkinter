@@ -1,0 +1,91 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import font
+
+#import requests
+
+class CharacterAdjustmentApp:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Character Adjustment")
+
+        # Set the window size
+        self.root.geometry("1000x800")
+
+        # Create a custom font with larger size
+        #custom_font = font.Font(size=12)
+
+        self.attributes = {
+            "Gender": tk.StringVar(value=""),
+            "Age": tk.IntVar(value=18),
+            "Openness to Experience": tk.IntVar(value=1),
+            "Conscientiousness": tk.IntVar(value=1),
+            "Extroversion": tk.IntVar(value=1),
+            "Agreeableness": tk.IntVar(value=1),
+            "Neuroticism": tk.IntVar(value=1)
+        }
+
+        self.create_scale_bars()
+        self.create_gender_options()
+        self.create_age_entry()
+        self.create_submit_button()
+
+    def create_scale_bars(self):
+        traits = ["Openness to Experience", "Conscientiousness", "Extroversion", "Agreeableness", "Neuroticism"]
+        for i, attribute in enumerate(traits):
+            label = ttk.Label(self.root, text=attribute, font=font.Font(size=20))
+            label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
+
+            scale_bar = ttk.Scale(self.root, from_=1, to=5, variable=self.attributes[attribute], length=200)
+            scale_bar.grid(row=i, column=1, padx=10, pady=5)
+
+    def create_gender_options(self):
+        label = ttk.Label(self.root, text="Gender", font=font.Font(size=20))
+        label.grid(row=len(self.attributes), column=0, padx=10, pady=5, sticky="w")
+
+        gender_options = ttk.Combobox(self.root, textvariable=self.attributes["Gender"], values=["Male", "Female", "Other"])
+        gender_options.grid(row=len(self.attributes), column=1, padx=10, pady=5)
+
+    def create_age_entry(self):
+        label = ttk.Label(self.root, text="Age", font=font.Font(size=20))
+        label.grid(row=len(self.attributes)+1, column=0, padx=10, pady=5, sticky="w")
+
+        age_entry = ttk.Entry(self.root, textvariable=self.attributes["Age"])
+        age_entry.grid(row=len(self.attributes)+1, column=1, padx=10, pady=5)
+
+    def create_submit_button(self):
+        submit_button = ttk.Button(self.root, text="Submit", command=self.submit)
+        submit_button.grid(row=len(self.attributes)+2, column=0, columnspan=2, padx=10, pady=10)
+
+    def submit(self):
+        character_attributes = self.get_character_attributes()
+        generated_characters = self.generate_characters(character_attributes)
+        print(generated_characters)  # Replace with your desired functionality
+
+    def run(self):
+        self.root.mainloop()
+
+    def get_character_attributes(self):
+        return self.attributes
+
+    #def generate_characters(self, attributes):
+        # Replace 'http://your-website.com/generate_characters' with the actual API endpoint
+        #response = requests.post('http://your-website.com/generate_characters', json=attributes)
+        #generated_characters = response.json()
+        #return generated_characters
+
+    def submit(self):
+        character_attributes = self.get_character_attributes()
+        print("Character Attributes:")
+        for attribute, value in character_attributes.items():
+            print(f"{attribute}: {value.get()}")
+        print("")
+
+        generated_characters = self.generate_characters(character_attributes)
+        print("Generated Characters:")
+        for character in generated_characters:
+            print(character)
+
+if __name__ == "__main__":
+    app = CharacterAdjustmentApp()
+    app.run()
